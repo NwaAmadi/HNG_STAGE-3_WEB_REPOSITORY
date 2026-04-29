@@ -11,8 +11,11 @@ async function proxyRequest(request: NextRequest, path: string[]) {
       : await request.arrayBuffer();
 
   const headers = new Headers(request.headers);
-  headers.set("host", targetUrl.host);
+  headers.delete("host");
   headers.delete("content-length");
+  headers.set("x-forwarded-host", request.headers.get("host") ?? request.nextUrl.host);
+  headers.set("x-forwarded-proto", request.nextUrl.protocol.replace(":", ""));
+  headers.set("x-forwarded-port", request.nextUrl.port || (request.nextUrl.protocol === "https:" ? "443" : "80"));
 
   const response = await fetch(targetUrl, {
     method: request.method,
