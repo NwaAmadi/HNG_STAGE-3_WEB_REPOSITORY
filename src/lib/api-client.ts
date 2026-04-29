@@ -1,4 +1,5 @@
 import { getCsrfTokenFromCookie } from "@/lib/cookies";
+import { toBackendUrl } from "@/lib/public-config";
 
 type ApiFetchOptions = RequestInit & {
   retryOnAuth?: boolean;
@@ -15,7 +16,7 @@ export class ApiError extends Error {
 }
 
 export async function refreshSession() {
-  const response = await fetch("/api/auth/refresh", {
+  const response = await fetch(toBackendUrl("/api/auth/refresh"), {
     method: "POST",
     credentials: "include"
   });
@@ -31,6 +32,7 @@ export async function apiFetch<T = unknown>(path: string, options: ApiFetchOptio
   const { retryOnAuth = true, headers, method = "GET", ...rest } = options;
   const nextHeaders = new Headers(headers);
   const upperMethod = method.toUpperCase();
+  const targetUrl = toBackendUrl(path);
 
   if (path.startsWith("/api/profiles")) {
     nextHeaders.set("X-API-Version", "1");
@@ -43,7 +45,7 @@ export async function apiFetch<T = unknown>(path: string, options: ApiFetchOptio
     }
   }
 
-  const response = await fetch(path, {
+  const response = await fetch(targetUrl, {
     method: upperMethod,
     credentials: "include",
     headers: nextHeaders,
