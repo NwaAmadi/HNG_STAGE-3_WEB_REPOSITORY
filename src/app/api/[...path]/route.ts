@@ -1,6 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBackendBaseUrl } from "@/lib/config";
 
+function rewriteOAuthLocation(location: string, request: NextRequest) {
+  const portalOrigin = request.nextUrl.origin;
+
+  try {
+    const url = new URL(location);
+
+    if (url.hostname === "github.com" && url.pathname === "/login/oauth/authorize") {
+      const backendBaseUrl = getBackendBaseUrl();
+      const backendCallback = new URL("/api/auth/github/callback", backendBaseUrl).toString();
+      const portalCallback = new URL("/api/auth/github/callback", portalOrigin).toString();
+
+      if (url.searchParams.get("redirect_uri") === backendCallback) {
+        url.searchParams.set("redirect_uri", portalCallback);
+      }
+    }
+
+    const backendOrigin = new URL(getBackendBaseUrl()).origin;
+    if (url.origin === backendOrigin) {
+      return location.replace(backendOrigin, portalOrigin);
+    }
+
+    return url.toString();
+  } catch {
+    return location;
+  }
+}
+
 async function proxyRequest(request: NextRequest, path: string[]) {
   const backendBaseUrl = getBackendBaseUrl();
   const targetUrl = new URL(`${backendBaseUrl}/api/${path.join("/")}`);
@@ -31,6 +58,11 @@ async function proxyRequest(request: NextRequest, path: string[]) {
 
   response.headers.forEach((value, key) => {
     if (key.toLowerCase() === "content-encoding") {
+      return;
+    }
+
+    if (key.toLowerCase() === "location") {
+      nextResponse.headers.append(key, rewriteOAuthLocation(value, request));
       return;
     }
 
