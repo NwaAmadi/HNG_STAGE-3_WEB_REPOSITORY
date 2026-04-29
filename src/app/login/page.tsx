@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { useSession } from "@/components/session-provider";
 
@@ -47,9 +46,15 @@ export default function LoginPage() {
             Authentication is handled with HTTP-only cookies via the backend OAuth
             flow. Use your approved GitHub account to enter the portal.
           </p>
-          <Link className="primary-button" href="/api/auth/github">
+          <button
+            className="primary-button"
+            onClick={() => {
+              window.location.assign("/api/auth/github");
+            }}
+            type="button"
+          >
             Sign in with GitHub
-          </Link>
+          </button>
           <p className="subtle-copy">
             By continuing, you will be redirected through the secure OAuth flow and
             returned to the portal on success.

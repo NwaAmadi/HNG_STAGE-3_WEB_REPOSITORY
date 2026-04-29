@@ -64,4 +64,3 @@ This proxy layer keeps the frontend aligned with the required paths while lettin
 - `/profiles/[id]`
 - `/search`
 - `/account`
-
