@@ -6,7 +6,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CreateProfileForm } from "@/components/create-profile-form";
 import { useSession } from "@/components/session-provider";
 import { apiFetch, ApiError } from "@/lib/api-client";
-import { toBackendUrl } from "@/lib/public-config";
 import { buildQueryString, cleanObject, getPositiveInt } from "@/lib/utils";
 import type { PaginatedProfilesResponse } from "@/lib/types";
 
@@ -88,12 +87,10 @@ export default function ProfilesPage() {
     router.replace(`${pathname}?${params.toString()}`);
   }
 
-  const exportHref = toBackendUrl(
-    `/api/profiles/export?${buildQueryString({
-      ...Object.fromEntries(searchParams.entries()),
-      format: "csv"
-    })}`
-  );
+  const exportHref = `/api/profiles/export?${buildQueryString({
+    ...Object.fromEntries(searchParams.entries()),
+    format: "csv"
+  })}`;
 
   return (
     <section className="page-stack">

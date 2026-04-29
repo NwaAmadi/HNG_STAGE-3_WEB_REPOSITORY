@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { useSession } from "@/components/session-provider";
-import { toBackendUrl } from "@/lib/public-config";
 
 export default function LoginPage() {
   const { user, loading } = useSession();
-  const githubLoginHref = toBackendUrl("/api/auth/github");
 
   useEffect(() => {
     if (!loading && user) {
@@ -49,9 +47,9 @@ export default function LoginPage() {
             Authentication is handled with HTTP-only cookies via the backend OAuth
             flow. Use your approved GitHub account to enter the portal.
           </p>
-          <a className="primary-button" href={githubLoginHref}>
+          <Link className="primary-button" href="/api/auth/github">
             Sign in with GitHub
-          </a>
+          </Link>
           <p className="subtle-copy">
             By continuing, you will be redirected through the secure OAuth flow and
             returned to the portal on success.
