@@ -9,8 +9,8 @@ function rewriteOAuthLocation(location: string, request: NextRequest) {
 
     if (url.hostname === "github.com" && url.pathname === "/login/oauth/authorize") {
       const backendBaseUrl = getBackendBaseUrl();
-      const backendCallback = new URL("/api/auth/github/callback", backendBaseUrl).toString();
-      const portalCallback = new URL("/api/auth/github/callback", portalOrigin).toString();
+      const backendCallback = new URL("/auth/github/callback", backendBaseUrl).toString();
+      const portalCallback = new URL("/auth/github/callback", portalOrigin).toString();
 
       if (url.searchParams.get("redirect_uri") === backendCallback) {
         url.searchParams.set("redirect_uri", portalCallback);

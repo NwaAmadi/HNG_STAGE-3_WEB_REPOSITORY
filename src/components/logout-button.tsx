@@ -16,7 +16,7 @@ export function LogoutButton({ compact = false }: { compact?: boolean }) {
     setError(null);
 
     try {
-      await apiFetch("/api/auth/logout", {
+      await apiFetch("/auth/logout", {
         method: "POST",
         retryOnAuth: false
       });

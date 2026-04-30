@@ -49,7 +49,7 @@ export default function LoginPage() {
           <button
             className="primary-button"
             onClick={() => {
-              window.location.assign("/api/auth/github");
+              window.location.assign("/auth/github");
             }}
             type="button"
           >

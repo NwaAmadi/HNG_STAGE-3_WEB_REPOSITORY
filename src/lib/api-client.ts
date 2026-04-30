@@ -15,7 +15,7 @@ export class ApiError extends Error {
 }
 
 export async function refreshSession() {
-  const response = await fetch("/api/auth/refresh", {
+  const response = await fetch("/auth/refresh", {
     method: "POST",
     credentials: "include"
   });
@@ -50,7 +50,7 @@ export async function apiFetch<T = unknown>(path: string, options: ApiFetchOptio
     ...rest
   });
 
-  if (response.status === 401 && retryOnAuth && path !== "/api/auth/refresh") {
+  if (response.status === 401 && retryOnAuth && path !== "/auth/refresh") {
     await refreshSession();
     return apiFetch<T>(path, { ...options, retryOnAuth: false });
   }

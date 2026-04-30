@@ -40,14 +40,14 @@ This proxy layer keeps the frontend aligned with the required paths while lettin
 ## Authentication Flow
 
 1. User visits `/login`
-2. The GitHub button opens `/api/auth/github`
+2. The GitHub button opens `/auth/github`
 3. Next.js proxies that request to the backend OAuth endpoint
 4. Backend completes GitHub OAuth and sets:
    - `insighta_access_token`
    - `insighta_refresh_token`
    - `insighta_csrf_token`
 5. Protected pages load session state with `GET /api/users/me`
-6. If a protected request returns `401`, the client attempts one `POST /api/auth/refresh` and retries once
+6. If a protected request returns `401`, the client attempts one `POST /auth/refresh` and retries once
 
 ## Token Handling Approach
 
